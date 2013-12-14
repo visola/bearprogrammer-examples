@@ -1,0 +1,15 @@
+body {
+	background: rgb(170, 200, 250);
+	font-family: arial, sans-serif;
+	font-size: 12pt;
+}
+
+table {
+	border-collapse: collapse;
+	border: 1px solid;
+}
+
+td, th {
+	border: 1px solid;
+	padding: 2px 15px;
+}

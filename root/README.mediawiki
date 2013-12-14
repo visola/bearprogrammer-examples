@@ -1,0 +1,5 @@
+= ROOT =
+
+This pom.xml is a parent that manages versions for the many dependencies used throught the blog examples.
+
+

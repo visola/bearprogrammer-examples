@@ -1,0 +1,13 @@
+= Bear Programmer Example Code =
+
+This repository contains all the code for all the examples in my blog. The URL to access the blog is http://bearprogrammer.wordpress.com
+
+I decided to have all the code in one place, this way is simpler for people to clone and see all of the resources together.
+
+As the projects get larger and starts to depend on each other, it will also be easier to build them as they come all together in one repository.
+
+= Feedback and Comments =
+
+I would love to hear from you, this way I can improve my examples and make them easier to understand and more helpful. 
+
+I would also love to hear suggestions with themes for my next posts. Please give me your feedback and comments, here or in my blog.

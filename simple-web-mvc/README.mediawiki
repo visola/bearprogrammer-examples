@@ -1,0 +1,7 @@
+= Simple Web MVC =
+
+The objective of this project is to be the simplest MVC possible using servlets and JSPs. 
+
+It lacks many possible optimizations and it's far from being maintainable but it's simple and uses servlets as controllers that access the model and redirect the requests to JSPs to render the view portion.
+
+The link to the post that was written about this example is: http://bearprogrammer.com/?p=167

@@ -1,0 +1,35 @@
+apply plugin : 'application'
+apply plugin : 'eclipse'
+apply plugin : 'jacoco'
+apply plugin : 'java'
+
+mainClassName = 'com.bearprogrammer.blog.buildtool.Application'
+
+dependencies {
+	compile "org.hibernate:hibernate-entitymanager:4.2.5.Final"
+	compile "org.slf4j:slf4j-api:1.7.5"
+	compile "org.springframework:spring-context:3.2.4.RELEASE"
+	compile "org.springframework.data:spring-data-commons:1.6.1.RELEASE"
+	
+	runtime "ch.qos.logback:logback-classic:1.0.13"
+	runtime "com.h2database:h2:1.3.173"
+	runtime "commons-dbcp:commons-dbcp:1.4"
+	runtime "org.springframework.data:spring-data-jpa:1.4.1.RELEASE"
+	
+	testCompile "org.springframework:spring-test:3.2.4.RELEASE"
+	testCompile "junit:junit:4.11"
+	testCompile "org.mockito:mockito-all:1.9.5"
+}
+
+jacocoTestReport {
+	additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+}
+
+processResources {
+	filter org.apache.tools.ant.filters.ReplaceTokens, tokens: (project.properties.findAll { it.value != null })
+}
+
+repositories {
+	mavenCentral()
+}
+
