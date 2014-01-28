@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-    <info organisation="com.litle" module="sample-ant" />
+    <info organisation="com.bearprogrammer" module="sample-ant" />
 	<configurations>
 		<conf name="compile" description="Configuration for compile time."/>
 		<conf name="run" extends="compile" description="Configuration for runtime."/>
