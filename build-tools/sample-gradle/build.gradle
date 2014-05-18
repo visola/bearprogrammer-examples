@@ -21,10 +21,6 @@ dependencies {
 	testCompile "org.mockito:mockito-all:1.9.5"
 }
 
-jacocoTestReport {
-	additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-}
-
 processResources {
 	filter org.apache.tools.ant.filters.ReplaceTokens, tokens: (project.properties.findAll { it.value != null })
 }
