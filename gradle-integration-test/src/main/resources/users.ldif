@@ -1,0 +1,41 @@
+dn: ou=groups,dc=bearprogrammer,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=people,dc=bearprogrammer,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+dn: uid=johndoe,ou=people,dc=bearprogrammer,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: John Doe
+sn: Doe
+uid: johndoe
+userPassword: password
+
+dn: uid=janedoe,ou=people,dc=bearprogrammer,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Jane Doe
+sn: Doe
+uid: janedoe
+userPassword: password
+
+dn: cn=admin,ou=groups,dc=bearprogrammer,dc=com
+objectclass: top
+objectclass: groupOfNames
+cn: admin
+uniqueMember: uid=johndoe,ou=people,dc=litle,dc=com
+
+dn: cn=user,ou=groups,dc=bearprogrammer,dc=com
+objectclass: top
+objectclass: groupOfNames
+cn: user
+uniqueMember: uid=janedoe,ou=people,dc=bearprogrammer,dc=com

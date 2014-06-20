@@ -1,0 +1,109 @@
+////////// PLUGINS /////////////
+apply plugin : 'eclipse'
+apply plugin : 'eclipse-wtp'
+apply plugin : 'java'
+apply plugin : 'jacoco'
+apply plugin : 'war'
+apply plugin : 'gretty'
+
+////////// BUILD SCRIPT CONFIGURATION /////////////
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.akhikhl.gretty:gretty-plugin:0.0.24'
+  }
+}
+
+////////// CONFIGURATION /////////////
+configurations {
+    testFunctionalCompile.extendsFrom testCompile
+    testFunctionalRuntime.extendsFrom testRuntime
+    
+    testIntegrationCompile.extendsFrom testFunctionalCompile
+    testIntegrationRuntime.extendsFrom testFunctionalRuntime
+}
+
+sourceSets {
+	testFunctional
+    testIntegration
+}
+
+////////// DEPENDENCIES /////////////
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+dependencies {
+    compile 'com.h2database:h2:1.3.170'
+    compile 'javax.servlet:javax.servlet-api:3.0.1'
+    compile 'jstl:jstl:1.2'
+    compile 'org.apache.directory.server:apacheds-server-jndi:1.5.5'
+    compile 'org.flywaydb:flyway-core:3.0'
+    compile 'org.hibernate:hibernate-core:4.3.5.Final'
+    compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
+    compile 'org.slf4j:slf4j-api:1.7.6'
+    compile 'org.springframework.data:spring-data-jpa:1.5.2.RELEASE'
+    compile 'org.springframework:spring-webmvc:4.0.5.RELEASE'
+    compile 'org.springframework.security:spring-security-web:3.2.4.RELEASE'
+    compile 'org.springframework.security:spring-security-config:3.2.4.RELEASE'
+    compile 'org.springframework.security:spring-security-ldap:3.2.4.RELEASE'
+
+    testCompile 'junit:junit:4.11'
+
+    testIntegrationCompile 'info.cukes:cucumber-java:1.1.6'
+    testIntegrationCompile 'info.cukes:cucumber-junit:1.1.6'
+    testIntegrationCompile 'info.cukes:cucumber-spring:1.1.6'
+    testIntegrationCompile 'org.seleniumhq.selenium:selenium-java:2.41.0'
+    testIntegrationCompile 'org.springframework:spring-test:4.0.5.RELEASE'
+}
+
+////////// PLUGIN CONFIGURATION /////////////
+eclipse {
+    classpath {
+        plusConfigurations += configurations.testIntegrationCompile
+    }
+}
+
+gretty {
+    integrationTestTask = 'testIntegrartion'
+    
+    afterEvaluate {
+    	jettyBeforeIntegrationTest.inputs.files tasks[integrationTestTask].inputs.files	
+    	jettyBeforeIntegrationTest.outputs.files tasks[integrationTestTask].outputs.files
+    		
+    	jettyAfterIntegrationTest.inputs.files tasks[integrationTestTask].inputs.files
+    	jettyAfterIntegrationTest.outputs.files tasks[integrationTestTask].outputs.files
+    }
+}
+
+test {
+    reports.junitXml.destination = "$buildDir/test-results/unit"
+    reports.html.destination = "$buildDir/reports/tests/unit"
+}
+
+
+////////// CUSTOM TASKS /////////////
+task testFunctional(type:Test, dependsOn: testFunctionalClasses){
+    check.dependsOn it
+    classpath = project.sourceSets.testFunctional.runtimeClasspath
+    mustRunAfter test // We don't want to run functional tests if unit tests don't pass
+    testClassesDir = file(project.sourceSets.testFunctional.output.classesDir)
+    reports.junitXml.destination = "$buildDir/test-results/functional"
+    reports.html.destination = "$buildDir/reports/tests/functional"
+}
+
+task testIntegrartion (type:JavaExec, dependsOn:testIntegrationClasses) {
+	check.dependsOn it
+    args = ['--strict', '-f', "html:${buildDir}/reports/tests/integration", '--glue', 'com.bearprogrammer.blog.sample.integrationTest.glue', 'src/testIntegration/features']
+    classpath = project.sourceSets.testIntegration.runtimeClasspath
+    description = "Run integration tests. Add your features to src/testIntegration/features. Your step definitions should go into package com.bearprogrammer.blog.sample.integrationTest.glue inside and your java classes to src/testIntegration/java."
+    group = 'Verification'
+    main = 'cucumber.api.cli.Main'
+    mustRunAfter testFunctional // We don't want to run integration tests if unit test haven't past 
+    inputs.files fileTree(dir:'src/testIntegration/features',include:'**/*.feature'), project.sourceSets.testIntegration, project.sourceSets.main
+    outputs.files "${buildDir}/reports/tests/integration"
+}
