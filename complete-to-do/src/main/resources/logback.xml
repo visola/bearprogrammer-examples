@@ -1,0 +1,22 @@
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="JdbmIndex" level="INFO" /> 
+	<logger name="JdbmTable" level="INFO" /> 
+	<logger name="jndi" level="INFO" /> 
+	<logger name="LOG_CHANGES" level="INFO" /> 
+	<logger name="org.apache" level="INFO" /> 
+	<logger name="org.eclipse" level="INFO" /> 
+	<logger name="org.flywaydb" level="INFO" /> 
+	<logger name="org.hibernate" level="INFO" /> 
+	<logger name="org.springframework" level="INFO" /> 
+
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

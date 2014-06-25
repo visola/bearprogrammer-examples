@@ -1,0 +1,12 @@
+body {
+	font-family: sans-serif;
+}
+
+table, td {
+	border: 1px solid #ccc;
+	border-radius: 2px;
+}
+
+td, th {
+	padding: 5px 10px;
+}

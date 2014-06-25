@@ -15,7 +15,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@ComponentScan("com.bearprogrammer.blog.sample.integrationTest")
+@ComponentScan({"com.bearprogrammer.blog.sample.test","com.bearprogrammer.blog.sample.integrationTest"})
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("com.bearprogrammer.blog.sample.repository")

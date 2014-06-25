@@ -37,6 +37,8 @@ sourceSets {
 		java {
 			compileClasspath += main.output
             runtimeClasspath += main.output
+			compileClasspath += functionalTest.output
+            runtimeClasspath += functionalTest.output
 		}
 	}
 }
@@ -48,13 +50,11 @@ repositories {
 }
 
 dependencies {
-    compile 'com.h2database:h2:1.3.170'
     compile 'javax.servlet:javax.servlet-api:3.0.1'
     compile 'jstl:jstl:1.2'
-    compile 'org.apache.directory.server:apacheds-server-jndi:1.5.5'
     compile 'org.flywaydb:flyway-core:3.0'
-    compile 'org.hibernate:hibernate-core:4.3.5.Final'
     compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
+    compile 'org.hibernate:hibernate-validator:5.1.1.Final'
     compile 'org.slf4j:slf4j-api:1.7.6'
     compile 'org.springframework.data:spring-data-jpa:1.5.2.RELEASE'
     compile 'org.springframework:spring-webmvc:4.0.5.RELEASE'
@@ -62,9 +62,12 @@ dependencies {
     compile 'org.springframework.security:spring-security-config:3.2.4.RELEASE'
     compile 'org.springframework.security:spring-security-ldap:3.2.4.RELEASE'
     
+    runtime 'ch.qos.logback:logback-classic:1.1.2'
     runtime 'mysql:mysql-connector-java:5.1.31'
+    runtime 'org.apache.directory.server:apacheds-server-jndi:1.5.5'
 
     testCompile 'junit:junit:4.11'
+    testCompile 'org.assertj:assertj-core:1.6.1'
     testCompile 'org.mockito:mockito-core:1.9.5'
     
     functionalTestCompile 'org.springframework:spring-test:4.0.5.RELEASE'
@@ -83,13 +86,16 @@ eclipse {
 }
 
 gretty {
-	httpPort = 9080
     integrationTestTask = 'integrartionTest'
     
     afterEvaluate {
     	// Add integration test classes to Jetty's war
     	tasks['prepareInplaceWebApp'].dependsOn 'copyIntegrationTestClasses', 'copyIntegrationTestResources'
     }
+}
+
+jacocoTestReport {
+    executionData = fileTree(dir:"${buildDir}/jacoco/", include:"*.exec")
 }
 
 test {
@@ -99,9 +105,15 @@ test {
 
 
 ////////// CUSTOM TASKS /////////////
-task copyIntegrationTestClasses(type:Copy, dependsOn: integrationTestClasses) {
+task copyIntegrationTestClasses(type:Copy, dependsOn: [functionalTestClasses, integrationTestClasses]) {
+	from 'build/classes/functionalTest/'
+	into 'build/inplaceWebapp/WEB-INF/classes'
+	
 	from 'build/classes/integrationTest/'
 	into 'build/inplaceWebapp/WEB-INF/classes'
+	
+	include '**/IntegrationTestDatabaseConfiguration*'
+	include '**/DatabaseCleaner*'
 }
 
 task copyIntegrationTestResources(type:Copy, dependsOn: integrationTestClasses) {
@@ -128,4 +140,8 @@ task integrartionTest (type:JavaExec, dependsOn:integrationTestClasses) {
     mustRunAfter functionalTest // We don't want to run integration tests if functional test haven't past 
     inputs.files fileTree(dir:'src/integrationTest/features',include:'**/*.feature'), project.sourceSets.integrationTest, project.sourceSets.main
     outputs.files "${buildDir}/reports/tests/integration"
+    
+    if (project.hasProperty('webdriver')) {
+    	jvmArgs = ["-Dwebdriver=${webdriver}"]
+    }
 }

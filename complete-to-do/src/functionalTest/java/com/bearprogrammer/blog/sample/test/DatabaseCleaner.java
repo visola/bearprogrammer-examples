@@ -1,4 +1,4 @@
-package com.bearprogrammer.blog.sample.integrationTest;
+package com.bearprogrammer.blog.sample.test;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

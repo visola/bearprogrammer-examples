@@ -8,6 +8,6 @@ import com.bearprogrammer.blog.sample.ToDo;
 
 public interface ToDoRepository extends PagingAndSortingRepository<ToDo,Integer> {
 	
-	List<ToDo> findByAssignedTo(String assignedTo);
+	List<ToDo> findByAssignedToOrCreatedBy(String assignedTo, String createdBy);
 
 }
