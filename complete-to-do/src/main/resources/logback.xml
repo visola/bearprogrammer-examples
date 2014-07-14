@@ -2,7 +2,7 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} %logger{1} - %msg%n</pattern>
 		</encoder>
 	</appender>
 	
@@ -15,6 +15,7 @@
 	<logger name="org.flywaydb" level="INFO" /> 
 	<logger name="org.hibernate" level="INFO" /> 
 	<logger name="org.springframework" level="INFO" /> 
+	<logger name="org.akhikhl.gretty" level="INFO" /> 
 
 	<root level="debug">
 		<appender-ref ref="STDOUT" />

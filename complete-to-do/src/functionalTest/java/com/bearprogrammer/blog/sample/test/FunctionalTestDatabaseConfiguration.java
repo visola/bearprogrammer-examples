@@ -13,8 +13,10 @@ import com.bearprogrammer.blog.sample.config.DataSourceFromEnvironmentConfigurat
 @PropertySource("classpath:functionalTestDatabase.properties")
 public class FunctionalTestDatabaseConfiguration extends DataSourceFromEnvironmentConfiguration {
 	
-	@Bean(name="flyway")
-    public Flyway getFlyway(DatabaseCleaner cleaner, DataSource dataSource) throws Exception {
+	@Bean(initMethod="migrate")
+    public Flyway flyway(DatabaseCleaner cleaner, DataSource dataSource) throws Exception {
+		cleaner.cleanDatabase();
+		
 		Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
         return flyway;

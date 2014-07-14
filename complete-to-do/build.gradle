@@ -4,7 +4,7 @@ apply plugin : 'eclipse-wtp'
 apply plugin : 'java'
 apply plugin : 'jacoco'
 apply plugin : 'war'
-apply plugin : 'gretty'
+apply plugin : 'org.akhikhl.gretty'
 
 ////////// BUILD SCRIPT CONFIGURATION /////////////
 buildscript {
@@ -13,7 +13,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'org.akhikhl.gretty:gretty-plugin:0.0.23'
+    classpath 'org.akhikhl.gretty:gretty:1.0.0'
   }
 }
 
@@ -52,6 +52,7 @@ repositories {
 dependencies {
     compile 'javax.servlet:javax.servlet-api:3.0.1'
     compile 'jstl:jstl:1.2'
+	compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.flywaydb:flyway-core:3.0'
     compile 'org.hibernate:hibernate-entitymanager:4.3.5.Final'
     compile 'org.hibernate:hibernate-validator:5.1.1.Final'
@@ -86,7 +87,9 @@ eclipse {
 }
 
 gretty {
+	jvmArgs = ['-Dspring.profiles.active=test']
     integrationTestTask = 'integrartionTest'
+    servletContainer = 'tomcat7'
     
     afterEvaluate {
     	// Add integration test classes to Jetty's war
@@ -134,14 +137,14 @@ task integrartionTest (type:JavaExec, dependsOn:integrationTestClasses) {
 	check.dependsOn it
     args = ['--strict', '-f', "html:${buildDir}/reports/tests/integration", '--glue', 'com.bearprogrammer.blog.sample.integrationTest.glue', 'src/integrationTest/features']
     classpath = project.sourceSets.integrationTest.runtimeClasspath
-    description = "Run integration tests. Add your features to src/integrationTest/features. Your step definitions should go into package com.bearprogrammer.blog.sample.integrationTest.glue inside and your java classes to src/integrationTest/java."
+    description = "Run integration tests. Add your features to src/integrationTest/features. Your step definitions should go inside package com.bearprogrammer.blog.sample.integrationTest.glue and your java classes to src/integrationTest/java."
     group = 'Verification'
     main = 'cucumber.api.cli.Main'
     mustRunAfter functionalTest // We don't want to run integration tests if functional test haven't past 
-    inputs.files fileTree(dir:'src/integrationTest/features',include:'**/*.feature'), project.sourceSets.integrationTest, project.sourceSets.main
+    inputs.files fileTree(dir:'src/integrationTest/features',include:'**/*.feature')
     outputs.files "${buildDir}/reports/tests/integration"
     
     if (project.hasProperty('webdriver')) {
-    	jvmArgs = ["-Dwebdriver=${webdriver}"]
+    	jvmArgs = ["-Dwebdriver=${webdriver}",'-Dspring.profiles.active=test']
     }
 }

@@ -13,8 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:database.properties")
 public class DatabaseConfiguration extends DataSourceFromEnvironmentConfiguration {
 	
-	@Bean(initMethod = "migrate", name="flyway")
-    public Flyway getFlyway(DataSource dataSource) {
+	@Bean(initMethod = "migrate")
+    public Flyway flyway(DataSource dataSource) {
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
         return flyway;

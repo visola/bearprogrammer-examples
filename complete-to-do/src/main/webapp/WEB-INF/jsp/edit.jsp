@@ -12,7 +12,10 @@
 		<br />
 		
 		<label>Assigned To</label>
-		<form:input path="assignedTo" />
+		<form:select path="assignedTo.username">
+			<form:option value="">--- Select One ---</form:option>
+			<form:options items="${usernames }" />
+		</form:select>
 		<form:errors path="assignedTo" />
 		<br />
 		

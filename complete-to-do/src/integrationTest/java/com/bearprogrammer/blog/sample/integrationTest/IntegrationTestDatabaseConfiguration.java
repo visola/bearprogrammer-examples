@@ -16,8 +16,8 @@ import com.bearprogrammer.blog.sample.test.DatabaseCleaner;
 @PropertySource("classpath:integrationTestDatabase.properties")
 public class IntegrationTestDatabaseConfiguration extends DataSourceFromEnvironmentConfiguration {
 	
-	@Bean(initMethod = "migrate", name="flyway")
-    public Flyway getFlyway(DatabaseCleaner cleaner, DataSource dataSource) throws Exception {
+	@Bean(initMethod = "migrate")
+    public Flyway flyway(DatabaseCleaner cleaner, DataSource dataSource) throws Exception {
 		cleaner.cleanDatabase();
 		
 		Flyway flyway = new Flyway();

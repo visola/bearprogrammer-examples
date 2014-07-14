@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
-<Configure class="org.eclipse.jetty.webapp.WebAppContext">
-	<New id="springProfileForJetty" class="org.eclipse.jetty.plus.jndi.EnvEntry">
-		<Arg>spring.profiles.active</Arg>
-		<Arg type="java.lang.String">test</Arg>
-	</New>
-</Configure>

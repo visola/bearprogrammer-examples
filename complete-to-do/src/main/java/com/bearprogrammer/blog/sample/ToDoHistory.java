@@ -18,7 +18,8 @@ public class ToDoHistory {
 
 	Calendar updated;
 
-	String updatedBy;
+	@ManyToOne
+	User updatedBy;
 
 	@ManyToOne
 	ToDo toDo;
@@ -51,7 +52,7 @@ public class ToDoHistory {
 		return updated;
 	}
 
-	public String getUpdatedBy() {
+	public User getUpdatedBy() {
 		return updatedBy;
 	}
 
@@ -71,7 +72,7 @@ public class ToDoHistory {
 		this.updated = updated;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
+	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

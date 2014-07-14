@@ -5,8 +5,10 @@ import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -19,20 +21,21 @@ public class ToDo {
 	@Size(min=3, max=1024)
 	String action;
 
-	@Size(min=2)
-	String createdBy;
+	@ManyToOne
+	User createdBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	Calendar created;
 
-	@Size(min=2)
-	String updatedBy;
+	@ManyToOne
+	User updatedBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	Calendar updated;
 
-	@Size(min=2,max=50)
-	String assignedTo;
+	@NotNull
+	@ManyToOne
+	User assignedTo;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -85,7 +88,7 @@ public class ToDo {
 		return action;
 	}
 
-	public String getAssignedTo() {
+	public User getAssignedTo() {
 		return assignedTo;
 	}
 
@@ -93,7 +96,7 @@ public class ToDo {
 		return created;
 	}
 
-	public String getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
@@ -105,7 +108,7 @@ public class ToDo {
 		return updated;
 	}
 
-	public String getUpdatedBy() {
+	public User getUpdatedBy() {
 		return updatedBy;
 	}
 
@@ -130,7 +133,7 @@ public class ToDo {
 		this.action = action;
 	}
 
-	public void setAssignedTo(String assignedTo) {
+	public void setAssignedTo(User assignedTo) {
 		this.assignedTo = assignedTo;
 	}
 
@@ -138,7 +141,7 @@ public class ToDo {
 		this.created = created;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -150,7 +153,7 @@ public class ToDo {
 		this.updated = updated;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
+	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

@@ -12,22 +12,22 @@
 				<thead>
 					<tr>
 						<th>Action</th>
+						<th>Assigned To</th>
 						<th>Created</th>
 						<th>Created By</th>
 						<th>Updated</th>
 						<th>Updated By</th>
-						<th>Assigned To</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${toDos}" var="toDo">
 						<tr>
 							<td><a href="${toDo.id}">${toDo.action}</a></td>
+							<td>${toDo.assignedTo.username}</td>
 							<td><fmt:formatDate value="${toDo.created.time}" pattern="yyyy-MM-dd" /></td>
-							<td>${toDo.createdBy}</td>
+							<td>${toDo.createdBy.username}</td>
 							<td><fmt:formatDate value="${toDo.updated.time}" pattern="yyyy-MM-dd" /></td>
-							<td>${toDo.updatedBy}</td>
-							<td>${toDo.assignedTo}</td>
+							<td>${toDo.updatedBy.username}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

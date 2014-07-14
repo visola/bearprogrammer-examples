@@ -11,8 +11,12 @@ import org.junit.Test;
 
 import com.bearprogrammer.blog.sample.ToDo;
 import com.bearprogrammer.blog.sample.ToDoHistory;
+import com.bearprogrammer.blog.sample.User;
+import com.bearprogrammer.blog.sample.test.BaseFunctionalTest;
 
 public class TestToDoRepositoryImpl extends BaseFunctionalTest {
+	
+	User someone;
 	
 	@PersistenceContext
 	EntityManager entityManager;
@@ -21,6 +25,14 @@ public class TestToDoRepositoryImpl extends BaseFunctionalTest {
 	
 	@Before
 	public void setup() {
+		someone = new User();
+		someone.setUsername("someone");
+		someone.setPassword("password");
+		
+		entityManager.persist(someone);
+		
+		Assert.assertNotNull(someone.getId());
+		
 		subjectUnderTest = new ToDoRepositoryImpl();
 		subjectUnderTest.entityManager = entityManager;
 	}
@@ -56,12 +68,17 @@ public class TestToDoRepositoryImpl extends BaseFunctionalTest {
 
 	private ToDo createToDo() {
 		ToDo toDo = new ToDo();
+		
 		toDo.setAction("Buy milk");
-		toDo.setAssignedTo("someone");
+		
+		toDo.setAssignedTo(someone);
+		
 		toDo.setCreated(Calendar.getInstance());
+		toDo.setCreatedBy(someone);
+		
 		toDo.setUpdated(Calendar.getInstance());
-		toDo.setCreatedBy("someone");
-		toDo.setUpdatedBy("someone");
+		toDo.setUpdatedBy(someone);
+		
 		return toDo;
 	}
 

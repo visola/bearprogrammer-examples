@@ -2,6 +2,7 @@ package com.bearprogrammer.blog.sample.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -12,22 +13,34 @@ import org.mockito.Mockito;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.MapBindingResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bearprogrammer.blog.sample.ToDo;
+import com.bearprogrammer.blog.sample.User;
 import com.bearprogrammer.blog.sample.repository.ToDoRepository;
+import com.bearprogrammer.blog.sample.repository.UserRepository;
 
 public class TestToDoController {
 	
 	ToDoRepository toDoRepository;
+	UserRepository userRepository;
 	ToDoController subjectUnderTest;
+	User user;
 	
 	@Before
 	public void setup() {
 		toDoRepository = Mockito.mock(ToDoRepository.class);
+		userRepository = Mockito.mock(UserRepository.class);
 		
 		subjectUnderTest = new ToDoController();
 		subjectUnderTest.toDoRepository = toDoRepository;
+		subjectUnderTest.userRepository = userRepository;
+		
+		user = new User();
+		user.setId(1);
+		user.setUsername("username");
+		user.setPassword("password");
 	}
 	
 	@Test
@@ -94,24 +107,25 @@ public class TestToDoController {
 	
 	@Test
 	public void testSaveToDo() {
-		String username = "test";
 		long now = Calendar.getInstance().getTimeInMillis();
 		
 		BindingResult validations = Mockito.mock(BindingResult.class);
 		
 		UserDetails currentUser = Mockito.mock(UserDetails.class);
-		Mockito.when(currentUser.getUsername()).thenReturn(username);
+		Mockito.when(currentUser.getUsername()).thenReturn(user.getUsername());
+		Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
 
 		ToDo toDo = new ToDo();
+		toDo.setAssignedTo(user);
 		
 		ModelAndView mav = subjectUnderTest.save(toDo, validations, currentUser);
 		
 		Mockito.verify(toDoRepository).save(toDo);
 		
-		Assert.assertEquals("Should have set created by.", username, toDo.getCreatedBy());
+		Assert.assertEquals("Should have set created by.", user, toDo.getCreatedBy());
 		Assertions.assertThat(toDo.getCreated().getTimeInMillis()).isBetween(now, now + 1000);
 		
-		Assert.assertEquals("Should have set updated by.", username, toDo.getUpdatedBy());
+		Assert.assertEquals("Should have set updated by.", user, toDo.getUpdatedBy());
 		Assertions.assertThat(toDo.getUpdated().getTimeInMillis()).isBetween(now, now + 1000);
 		
 		Assert.assertEquals("Should have set path to redirect.", "redirect:/",mav.getViewName());
@@ -125,12 +139,43 @@ public class TestToDoController {
 		Mockito.when(validations.hasErrors()).thenReturn(true);
 		
 		ToDo toDo = new ToDo();
+		toDo.setAssignedTo(user);
 		
 		ModelAndView mav = subjectUnderTest.save(toDo, validations, currentUser);
 		
 		Assert.assertEquals("Should go back to edit page.", "edit", mav.getViewName());
 		
 		Mockito.verifyNoMoreInteractions(toDoRepository);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testSaveWithNoAssignedTo() {
+		BindingResult validations = new MapBindingResult(new HashMap(), "toDo");
+		
+		UserDetails currentUserDetails = Mockito.mock(UserDetails.class);
+		ToDo toDo = new ToDo();
+		
+		ModelAndView mav = subjectUnderTest.save(toDo, validations, currentUserDetails);
+		
+		Assert.assertEquals(1,validations.getErrorCount());
+		Assert.assertEquals("edit",mav.getViewName());
+	}
+		
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testSaveWithEmptyAssignedToUsername() {
+		BindingResult validations = new MapBindingResult(new HashMap(), "toDo");
+		
+		UserDetails currentUserDetails = Mockito.mock(UserDetails.class);
+		
+		ToDo toDo = new ToDo();
+		toDo.setAssignedTo(new User());
+		
+		ModelAndView mav = subjectUnderTest.save(toDo, validations, currentUserDetails);
+		
+		Assert.assertEquals(1,validations.getErrorCount()); 
+		Assert.assertEquals("edit",mav.getViewName());
 	}
 	
 	@Test
@@ -156,7 +201,16 @@ public class TestToDoController {
 		
 		subjectUnderTest.toDoList(user);
 		
-		Mockito.verify(toDoRepository).findByAssignedToOrCreatedBy(username, username);
+		Mockito.verify(toDoRepository).findByAssignedToUsernameOrCreatedByUsername(username, username);
 	}
+	
+	@Test
+	public void testGetUsernames() {
+		subjectUnderTest.getUsernames();
+		
+		Mockito.verify(userRepository).findUsernames();
+	}
+	
+	
 
 }
