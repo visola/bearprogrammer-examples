@@ -1,4 +1,4 @@
-Feature:
+Feature: Login Page
 
 	As a user I want to be able to login and out of the system.
 	
@@ -12,11 +12,11 @@ Feature:
 		
 	Scenario: Login with no user
 		When I login with user '' and password 'password'
-		Then I should see the message 'Empty Username'
+		Then I should see the message 'Bad credentials'
 		
 	Scenario: Login with no password
 		When I login with user 'janedoe' and password ''
-		Then I should see the message 'Empty Password'
+		Then I should see the message 'Bad credentials'
 		
 	Scenario: Login with wrong user
 		When I login with user 'wrong' and password 'password'

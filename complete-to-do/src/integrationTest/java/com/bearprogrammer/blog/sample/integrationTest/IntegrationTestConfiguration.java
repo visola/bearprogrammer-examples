@@ -1,6 +1,7 @@
 package com.bearprogrammer.blog.sample.integrationTest;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +34,8 @@ public class IntegrationTestConfiguration {
 		/* This won't work with IE because package is not consistent with driver name.
 		 * Chrome driver needs some setup: https://sites.google.com/a/chromium.org/chromedriver/getting-started
 		 */
-		final WebDriver driver = (WebDriver) Class.forName(String.format("org.openqa.selenium.%s.%sDriver",driverName.toLowerCase(), driverName)).newInstance();
+		final WebDriver driver = new EventFiringWebDriver((WebDriver) Class.forName(String.format("org.openqa.selenium.%s.%sDriver",driverName.toLowerCase(), driverName)).newInstance());
+		( (EventFiringWebDriver) driver ).register(new SpeedManagerEventLister());
         
         // Add shutdown hook to kill the browser when JVM dies
         Runtime.getRuntime().addShutdownHook(new Thread() {

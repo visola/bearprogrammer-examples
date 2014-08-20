@@ -2,6 +2,7 @@ package com.bearprogrammer.blog.sample.integrationTest.selenium;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -13,7 +14,7 @@ public class MyExpectedConditions {
 			@Override
 			public WebElement apply(WebDriver driver) {
 				for (By locator : locators) {
-					WebElement el = findElement(locator, driver);
+					WebElement el = maybeFindElement(locator, driver);
 					if (el != null && el.isDisplayed()) {
 						return el;
 					}
@@ -23,10 +24,11 @@ public class MyExpectedConditions {
 		};
 	}
 	
-	static WebElement findElement(By locator, WebDriver driver) {
+	static WebElement maybeFindElement(By locator, WebDriver driver) {
 		try {
 			return driver.findElement(locator);
-		} catch (NoSuchElementException ex) {}
+		} catch (NoSuchElementException | TimeoutException ex) {}
+		
 		return null;
 	}
 

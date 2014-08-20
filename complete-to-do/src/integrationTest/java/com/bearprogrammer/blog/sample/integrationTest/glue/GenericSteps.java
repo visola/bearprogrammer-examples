@@ -12,7 +12,7 @@ import com.bearprogrammer.blog.sample.integrationTest.IntegrationTestConfigurati
 
 import cucumber.api.java.en.Then;
 
-@ContextConfiguration(classes=IntegrationTestConfiguration.class)
+@ContextConfiguration(classes={IntegrationTestConfiguration.class})
 public class GenericSteps {
 	
 	Logger logger = LoggerFactory.getLogger(GenericSteps.class);

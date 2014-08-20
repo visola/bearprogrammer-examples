@@ -14,11 +14,17 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-@ContextConfiguration(classes=IntegrationTestConfiguration.class)
+@ContextConfiguration(classes={IntegrationTestConfiguration.class})
 public class LoginSteps {
 	
 	@Autowired
 	WebDriver driver;
+	
+	@Given("^I am logged in with user '(.*)' and password '(.*)'$")
+	public void loggedInAs(String user, String password) {
+		goToLoginPage();
+		loginAs(user, password);
+	}
 
 	@Given("^I am at the login page$")
 	public void goToLoginPage() {
@@ -37,12 +43,12 @@ public class LoginSteps {
 		 * This will wait for any one of the locators to be visible 
 		 */
 		new WebDriverWait(driver, 10)
-			.until(MyExpectedConditions.forOneOfTheLocators(By.name("username"), By.xpath("//h2[contains(text(),\"To Do List\")]")));
+			.until(MyExpectedConditions.forOneOfTheLocators(By.name("username"), By.xpath("//h2[contains(text(),'To Do List')]")));
 	}
 
 	@Then("^I should see the home page$")
 	public void seeHomePage() {
-		driver.findElement(By.xpath("//h2[contains(text(),\"To Do List\")]"));
+		driver.findElement(By.xpath("//h2[text() = 'To Do List']"));
 	}
 	
 	@Then("^I can logout$")

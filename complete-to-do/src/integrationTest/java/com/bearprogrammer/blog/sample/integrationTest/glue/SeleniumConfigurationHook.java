@@ -10,7 +10,7 @@ import com.bearprogrammer.blog.sample.integrationTest.IntegrationTestConfigurati
 
 import cucumber.api.java.After;
 
-@ContextConfiguration(classes=IntegrationTestConfiguration.class)
+@ContextConfiguration(classes={IntegrationTestConfiguration.class})
 public class SeleniumConfigurationHook {
 	
 	Logger logger = LoggerFactory.getLogger(SeleniumConfigurationHook.class);

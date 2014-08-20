@@ -105,7 +105,7 @@ public class ToDoController {
 		logger.trace("User requested to do list: {}", currentUser.getUsername());
 		
 		ModelAndView mav = new ModelAndView("list");
-		if (isUserInRole(currentUser, "ROLE_ADMIN")) {
+		if (isUserInRole(currentUser, "admin")) {
 			mav.addObject("toDos", toDoRepository.findAll());
 		} else {
 			mav.addObject("toDos", toDoRepository.findByAssignedToUsernameOrCreatedByUsername(currentUser.getUsername(),currentUser.getUsername()));

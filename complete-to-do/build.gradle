@@ -13,7 +13,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'org.akhikhl.gretty:gretty:1.0.0'
+    classpath 'org.akhikhl.gretty:gretty:1.1.1'
   }
 }
 
@@ -59,9 +59,9 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.6'
     compile 'org.springframework.data:spring-data-jpa:1.5.2.RELEASE'
     compile 'org.springframework:spring-webmvc:4.0.5.RELEASE'
-    compile 'org.springframework.security:spring-security-web:3.2.4.RELEASE'
-    compile 'org.springframework.security:spring-security-config:3.2.4.RELEASE'
-    compile 'org.springframework.security:spring-security-ldap:3.2.4.RELEASE'
+    compile 'org.springframework.security:spring-security-web:3.2.5.RELEASE'
+    compile 'org.springframework.security:spring-security-config:3.2.5.RELEASE'
+    compile 'org.springframework.security:spring-security-ldap:3.2.5.RELEASE'
     
     runtime 'ch.qos.logback:logback-classic:1.1.2'
     runtime 'mysql:mysql-connector-java:5.1.31'
@@ -82,13 +82,13 @@ dependencies {
 ////////// PLUGIN CONFIGURATION /////////////
 eclipse {
     classpath {
-        plusConfigurations += configurations.integrationTestCompile
+        plusConfigurations += [configurations.integrationTestCompile]
     }
 }
 
 gretty {
 	jvmArgs = ['-Dspring.profiles.active=test']
-    integrationTestTask = 'integrartionTest'
+    integrationTestTask = 'integrationTest'
     servletContainer = 'tomcat7'
     
     afterEvaluate {
@@ -133,7 +133,7 @@ task functionalTest(type:Test, dependsOn: functionalTestClasses){
     reports.html.destination = "$buildDir/reports/tests/functional"
 }
 
-task integrartionTest (type:JavaExec, dependsOn:integrationTestClasses) {
+task integrationTest (type:JavaExec, dependsOn:integrationTestClasses) {
 	check.dependsOn it
     args = ['--strict', '-f', "html:${buildDir}/reports/tests/integration", '--glue', 'com.bearprogrammer.blog.sample.integrationTest.glue', 'src/integrationTest/features']
     classpath = project.sourceSets.integrationTest.runtimeClasspath
@@ -144,7 +144,12 @@ task integrartionTest (type:JavaExec, dependsOn:integrationTestClasses) {
     inputs.files fileTree(dir:'src/integrationTest/features',include:'**/*.feature')
     outputs.files "${buildDir}/reports/tests/integration"
     
+	jvmArgs = ['-Dspring.profiles.active=test']
     if (project.hasProperty('webdriver')) {
-    	jvmArgs = ["-Dwebdriver=${webdriver}",'-Dspring.profiles.active=test']
+    	jvmArgs += ["-Dwebdriver=${webdriver}"]
     }
+    
+    if (project.hasProperty('seleniumInterval')) {
+    	jvmArgs += ["-DseleniumInterval=${seleniumInterval}"]
+	}
 }
