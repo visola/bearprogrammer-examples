@@ -1,0 +1,3 @@
+<Context>
+	<Parameter name="spring.profiles.active" value="test" override="false"/>
+</Context>

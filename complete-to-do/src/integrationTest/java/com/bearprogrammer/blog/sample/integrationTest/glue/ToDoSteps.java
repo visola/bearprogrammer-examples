@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.bearprogrammer.blog.sample.integrationTest.IntegrationTestConfiguration;
+import com.bearprogrammer.blog.sample.integrationTest.selenium.LoginHelper;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -19,6 +20,10 @@ import cucumber.api.java.en.When;
 public class ToDoSteps {
 	
 	private static final String SOME_TO_DO = "Some To Do";
+	
+	@Autowired
+	LoginHelper loginHelper;
+	
 	@Autowired
 	WebDriver driver;
 	
@@ -38,7 +43,7 @@ public class ToDoSteps {
 			}
 		}
 		
-		driver.findElement(By.xpath("//input[@type='submit']")).click();
+		driver.findElement(By.xpath("//input[@value='Save']")).click();
 	}
 	
 	@Then("^I should see the information in the list of to dos$")
@@ -50,6 +55,13 @@ public class ToDoSteps {
 	public void shouldSeeAllTasks() {
 		List<WebElement> elements = driver.findElements(By.xpath("//table/tbody/tr"));
 		Assert.assertEquals("Should find 4 To Dos", 4, elements.size());
+	}
+	
+	@Then("^'(.*)' should see the to do item in his/her list$")
+	public void userSeeToInList(String username) {
+		loginHelper.logout();
+		loginHelper.loginWithUserAndDefaultPassword(username);
+		driver.findElement(By.linkText(SOME_TO_DO));
 	}
 
 }

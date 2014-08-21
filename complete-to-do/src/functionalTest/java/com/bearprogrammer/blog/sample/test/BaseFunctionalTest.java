@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bearprogrammer.blog.sample.config.ApplicationConfiguration;
+import com.bearprogrammer.blog.sample.functionalTest.FunctionalTestDatabaseConfiguration;
 
 @ComponentScan("com.bearprogrammer.blog.sample.test")
 @ContextConfiguration(classes={ApplicationConfiguration.class, FunctionalTestDatabaseConfiguration.class})

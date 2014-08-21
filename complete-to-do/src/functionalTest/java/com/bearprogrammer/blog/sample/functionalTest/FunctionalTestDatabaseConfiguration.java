@@ -1,4 +1,4 @@
-package com.bearprogrammer.blog.sample.test;
+package com.bearprogrammer.blog.sample.functionalTest;
 
 import javax.sql.DataSource;
 
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.bearprogrammer.blog.sample.config.DataSourceFromEnvironmentConfiguration;
+import com.bearprogrammer.blog.sample.test.DatabaseCleaner;
 
 @Configuration
 @PropertySource("classpath:functionalTestDatabase.properties")

@@ -16,6 +16,7 @@
 	<logger name="org.hibernate" level="INFO" /> 
 	<logger name="org.springframework" level="INFO" /> 
 	<logger name="org.akhikhl.gretty" level="INFO" /> 
+	<logger name="com.gargoylesoftware.htmlunit" level="INFO" /> 
 
 	<root level="debug">
 		<appender-ref ref="STDOUT" />

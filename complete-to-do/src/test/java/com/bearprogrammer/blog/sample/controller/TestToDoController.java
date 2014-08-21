@@ -183,7 +183,7 @@ public class TestToDoController {
 		UserDetails user = Mockito.mock(UserDetails.class);
 		
 		subjectUnderTest = Mockito.spy(subjectUnderTest);
-		Mockito.doReturn(true).when(subjectUnderTest).isUserInRole(user, "ROLE_ADMIN");
+		Mockito.doReturn(true).when(subjectUnderTest).isUserInRole(user, "admin");
 		
 		subjectUnderTest.toDoList(user);
 		

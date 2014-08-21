@@ -87,9 +87,11 @@ eclipse {
 }
 
 gretty {
+	contextConfigFile = "${projectDir}/tomcat-context.xml"
 	jvmArgs = ['-Dspring.profiles.active=test']
     integrationTestTask = 'integrationTest'
     servletContainer = 'tomcat7'
+    
     
     afterEvaluate {
     	// Add integration test classes to Jetty's war
@@ -111,15 +113,14 @@ test {
 task copyIntegrationTestClasses(type:Copy, dependsOn: [functionalTestClasses, integrationTestClasses]) {
 	from 'build/classes/functionalTest/'
 	into 'build/inplaceWebapp/WEB-INF/classes'
+	include '**/DatabaseCleaner.class'
 	
 	from 'build/classes/integrationTest/'
 	into 'build/inplaceWebapp/WEB-INF/classes'
-	
-	include '**/IntegrationTestDatabaseConfiguration*'
-	include '**/DatabaseCleaner*'
+	include '**/IntegrationTestDatabaseConfiguration.class'
 }
 
-task copyIntegrationTestResources(type:Copy, dependsOn: integrationTestClasses) {
+task copyIntegrationTestResources(type:Copy, dependsOn: processIntegrationTestResources) {
 	from 'build/resources/integrationTest/'
 	into 'build/inplaceWebapp/WEB-INF/classes'
 }
@@ -151,5 +152,9 @@ task integrationTest (type:JavaExec, dependsOn:integrationTestClasses) {
     
     if (project.hasProperty('seleniumInterval')) {
     	jvmArgs += ["-DseleniumInterval=${seleniumInterval}"]
+	}
+	
+    if (project.hasProperty('seleniumScreenshots')) {
+    	jvmArgs += ["-DseleniumScreenshots=${seleniumScreenshots}"]
 	}
 }

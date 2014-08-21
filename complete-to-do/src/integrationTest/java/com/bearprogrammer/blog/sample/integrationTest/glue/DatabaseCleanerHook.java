@@ -18,7 +18,7 @@ public class DatabaseCleanerHook {
 	@Autowired
 	Flyway flyway;
 	
-	@Before(order=Integer.MAX_VALUE - 1)
+	@Before(order=1000)
 	public void cleanDatabase() throws Exception {
 		databaseCleaner.cleanDatabase();
 		
