@@ -1,4 +1,4 @@
-package com.bearprogrammer.blog.sample.integrationTest;
+package com.bearprogrammer.blog.sample.integrationTest.selenium;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,8 +62,6 @@ public class ScreenshotTakerEventListener extends AbstractWebDriverEventListener
 	}
 
 	private void takeScreenShot(WebDriver driver) {
-		if (!Boolean.TRUE.toString().equalsIgnoreCase(System.getProperty("seleniumScreenshots"))) return; 
-			
 		File screenshot = ( (TakesScreenshot) driver ).getScreenshotAs(OutputType.FILE);
 		
 		String scenario = ScenarioMarkerHook.scenario == null ? "no-scenario" : ScenarioMarkerHook.scenario.getName();

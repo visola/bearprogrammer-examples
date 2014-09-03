@@ -1,4 +1,4 @@
-package com.bearprogrammer.blog.sample.integrationTest;
+package com.bearprogrammer.blog.sample.integrationTest.selenium;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

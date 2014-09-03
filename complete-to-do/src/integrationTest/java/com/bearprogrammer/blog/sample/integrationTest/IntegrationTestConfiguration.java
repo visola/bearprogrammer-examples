@@ -1,10 +1,8 @@
 package com.bearprogrammer.blog.sample.integrationTest;
 
-import java.util.List;
-
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +11,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import com.bearprogrammer.blog.sample.integrationTest.selenium.LoginHelper;
+import com.bearprogrammer.blog.sample.integrationTest.selenium.ScreenshotTakerEventListener;
+import com.bearprogrammer.blog.sample.integrationTest.selenium.SpeedManagerEventLister;
 import com.bearprogrammer.blog.sample.test.DatabaseCleaner;
 
 @Configuration
@@ -37,8 +37,14 @@ public class IntegrationTestConfiguration {
 	}
 	
 	@Bean
-    public WebDriver webDriver(List<WebDriverEventListener> webDriverEventListeners) throws Exception {
+    public WebDriver webDriver() throws Exception {
 		logger.info("Initializing WebDriver");
+		
+		if (logger.isTraceEnabled()) {
+			logger.trace("webdriver = '{}'", System.getProperty("webdriver"));
+			logger.trace("seleniumInterval = '{}'", System.getProperty("seleniumInterval"));
+			logger.trace("seleniumScreenshots = '{}'", System.getProperty("seleniumScreenshots"));
+		}
 		
 		String driverName = "HtmlUnit"; // Defaults to HtmlUnit
 		if (System.getProperty("webdriver") != null) {
@@ -50,13 +56,17 @@ public class IntegrationTestConfiguration {
 		/* This won't work with IE because package is not consistent with driver name.
 		 * Chrome driver needs some setup: https://sites.google.com/a/chromium.org/chromedriver/getting-started
 		 */
-		final WebDriver driver = new EventFiringWebDriver((WebDriver) Class.forName(String.format("org.openqa.selenium.%s.%sDriver",driverName.toLowerCase(), driverName)).newInstance());
+		Class<?> driverClass = Class.forName(String.format("org.openqa.selenium.%s.%sDriver",driverName.toLowerCase(), driverName));
+		final WebDriver driver = (WebDriver) driverClass.newInstance();
 		
-		EventFiringWebDriver eventFiringDriver = (EventFiringWebDriver) driver;
-		for (WebDriverEventListener eventListener : webDriverEventListeners) {
-			eventFiringDriver.register(eventListener);
+		EventFiringWebDriver eventFiringDriver = new EventFiringWebDriver(driver);
+		eventFiringDriver.register(new SpeedManagerEventLister());
+		
+		logger.debug("Using web driver: {}", driverClass.getName());
+		if (driver instanceof TakesScreenshot && Boolean.TRUE.toString().equalsIgnoreCase(System.getProperty("seleniumScreenshots"))) {
+			eventFiringDriver.register(new ScreenshotTakerEventListener());
 		}
-        
+		
         // Add shutdown hook to kill the browser when JVM dies
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run () {
@@ -69,17 +79,7 @@ public class IntegrationTestConfiguration {
             }
         });
         
-        return driver;
+        return eventFiringDriver;
     }
 	
-	@Bean
-	public WebDriverEventListener speedManagerEventListener() {
-		return new SpeedManagerEventLister();
-	}
-	
-	@Bean
-	public WebDriverEventListener screenshotTakerEventListener() {
-		return new ScreenshotTakerEventListener();
-	}
-
 }
