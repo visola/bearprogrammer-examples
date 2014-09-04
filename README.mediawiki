@@ -1,6 +1,6 @@
 = Bear Programmer Example Code =
 
-This repository contains all the code for all the examples in my blog. The URL to access the blog is http://bearprogrammer.wordpress.com
+This repository contains all the code for all the examples in my blog. The URL to access the blog is http://www.bearprogrammer.com
 
 I decided to have all the code in one place, this way is simpler for people to clone and see all of the resources together.
 
