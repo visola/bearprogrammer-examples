@@ -11,6 +11,6 @@ require.config({
   }
 });
 
-require(['router'], function () {
+require(['backbone', 'router'], function (Backbone, router) {
   Backbone.history.start({pushState: true});
 });
