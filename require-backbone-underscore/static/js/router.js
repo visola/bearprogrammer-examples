@@ -11,10 +11,11 @@ define(["backbone"],
 
     var Router = Backbone.Router.extend({
       routes : {
-        "(/)" : "home"
+        "(/)" : "contacts",
+        "/contacts(/)" : "contacts"
       },
 
-      home : function () {
+      contacts : function () {
         require(['view/Home'], function (HomeView) {
           render(new HomeView());
         });

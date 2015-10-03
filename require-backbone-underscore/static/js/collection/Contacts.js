@@ -1,5 +1,5 @@
 define(['backbone'], function (Backbone) {
   return Backbone.Collection.extend({
-    url: ''
+    url: '/api/v1/contacts'
   });
 });
