@@ -11,9 +11,7 @@ define(["backbone"],
 
     var Router = Backbone.Router.extend({
       routes : {
-        "(/)" : "home",
-        "contacts(/)" : "addContact",
-        "contacts/:id(/)" : "editContact"
+        "(/)" : "home"
       },
 
       home : function () {
