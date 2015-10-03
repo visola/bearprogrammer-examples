@@ -9,6 +9,14 @@ app.use(bodyParser.json());
 var contactsById = {};
 var lastId = 0;
 
+function sortContact(a, b) {
+  var result = a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase());
+  if (result == 0) {
+    result = a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase());
+  }
+  return result;
+}
+
 app.route('/api/v1/contacts/:id?')
   .get(function (req, resp) {
     var contactId = req.params.id,
@@ -18,6 +26,7 @@ app.route('/api/v1/contacts/:id?')
       for (var n in contactsById) {
         result.push(contactsById[n]);
       }
+      result.sort(sortContact);
       resp.json(result);
     } else {
       contact = contactsById[contactId];
