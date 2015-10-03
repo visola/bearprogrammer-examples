@@ -4,6 +4,7 @@ define(['backbone', 'jquery', 'router', 'tpl!template/contact/edit.html'],
   return Backbone.View.extend({
     template: EditContactTemplate,
     events: {
+      'click a': 'routeLink',
       'submit form' : 'save'
     },
     initialize: function () {
@@ -22,6 +23,10 @@ define(['backbone', 'jquery', 'router', 'tpl!template/contact/edit.html'],
       } else {
         this.$el.html(this.template({model:this.model}));
       }
+    },
+    routeLink: function (e) {
+      e.preventDefault();
+      router.navigate(e.target.getAttribute('href'), {trigger:true});
     },
     save: function (e) {
       var data = {},

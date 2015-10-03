@@ -1,13 +1,20 @@
 <h2><%= model.isNew() ? 'Add' : 'Edit' %> Contact</h2>
 
-<form>
-  <label>First Name</label>
-  <input name="firstName" value="<%= model.get('firstName') %>" />
-  <br />
+<div class="row">
+  <div class="col-md-4">
+    <form>
+      <div class="form-group">
+        <label>First Name</label>
+        <input class="form-control" name="firstName" value="<%= model.get('firstName') %>" />
+      </div>
 
-  <label>Last Name</label>
-  <input name="lastName" value="<%= model.get('lastName') %>" />
-  <br />
+      <div class="form-group">
+        <label>Last Name</label>
+        <input class="form-control" name="lastName" value="<%= model.get('lastName') %>" />
+      </div>
 
-  <input type="submit" value="Save" />
-</form>
+      <input class="btn btn-primary" type="submit" value="Save" />
+      <a class="btn btn-link" href="/contacts">Cancel</a>
+    </form>
+  </div>
+</div>
