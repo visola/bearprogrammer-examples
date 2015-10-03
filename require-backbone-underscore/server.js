@@ -11,11 +11,22 @@ var lastId = 0;
 
 app.route('/api/v1/contacts/:id?')
   .get(function (req, resp) {
-    var result = [];
-    for (var n in contactsById) {
-      result.push(contactsById[n]);
+    var contactId = req.params.id,
+      contact,
+      result = [];
+    if (contactId === undefined) {
+      for (var n in contactsById) {
+        result.push(contactsById[n]);
+      }
+      resp.json(result);
+    } else {
+      contact = contactsById[contactId];
+      if (contact) {
+        resp.json(contact);
+      } else {
+        resp.status(404).send('Contact not found');
+      }
     }
-    resp.json(result);
   })
   .post(function (req, resp) {
     var contact = req.body,
