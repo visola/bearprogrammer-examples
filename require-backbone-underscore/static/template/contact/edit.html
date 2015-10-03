@@ -1,0 +1,13 @@
+<h2><%= model.isNew() ? 'Add' : 'Edit' %> Contact</h2>
+
+<form>
+  <label>First Name</label>
+  <input name="firstName" value="<%= model.get('firstName') %>" />
+  <br />
+
+  <label>Last Name</label>
+  <input name="lastName" value="<%= model.get('lastName') %>" />
+  <br />
+
+  <input type="submit" value="Save" />
+</form>

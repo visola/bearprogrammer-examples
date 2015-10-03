@@ -5,12 +5,14 @@
 <table>
   <thead>
     <tr>
+      <th>ID</th>
       <th>First Name</th>
       <th>Last Name</th>
     </tr>
   </thead>
 <% for (var i = 0; i < collection.length; i++) { %>
   <tr>
+    <td><a href="/contacts/<%= collection.at(i).id %>"><%= collection.at(i).id %></a></td>
     <td><%= collection.at(i).get('firstName') %></td>
     <td><%= collection.at(i).get('lastName') %></td>
   </tr>

@@ -12,12 +12,23 @@ define(["backbone", "jquery"],
     var Router = Backbone.Router.extend({
       routes : {
         "(/)" : "contacts",
-        "/contacts(/)" : "contacts"
+        "contacts(/)" : "contacts",
+        "contacts/:id(/)" : "editContact"
       },
 
       contacts : function () {
         require(['view/contact/List'], function (ListContactsView) {
           render(new ListContactsView());
+        });
+      },
+
+      editContact: function (id) {
+        require(['view/contact/Edit', 'model/Contact'], function (EditContactView, Contact) {
+          var contact = new Contact();
+          if (id != 'new') {
+            contact.set('id', id);
+          }
+          render(new EditContactView({model:contact}));
         });
       }
     });
