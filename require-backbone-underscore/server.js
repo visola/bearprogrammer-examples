@@ -36,6 +36,10 @@ app.route('/api/v1/contacts/:id?')
     }
   });
 
+app.get('*', function(request, response){
+  response.sendfile('static/index.html');
+});
+
 var server = app.listen(3000, function () {
   var address = server.address(),
     host = address.address,
