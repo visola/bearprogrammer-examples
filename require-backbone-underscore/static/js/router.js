@@ -1,12 +1,12 @@
-define(["backbone"], 
-  function (Backbone) {
+define(["backbone", "jquery"],
+  function (Backbone, $) {
     function getContentElement() {
-      return document.getElementById('content');
+      return $('#content');
     };
 
     function render(view) {
       view.render();
-      getContentElement().appendChild(view.$el.get(0));
+      getContentElement().html(view.$el.get(0));
     };
 
     var Router = Backbone.Router.extend({
@@ -16,8 +16,8 @@ define(["backbone"],
       },
 
       contacts : function () {
-        require(['view/Home'], function (HomeView) {
-          render(new HomeView());
+        require(['view/contact/List'], function (ListContactsView) {
+          render(new ListContactsView());
         });
       }
     });

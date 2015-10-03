@@ -1,6 +1,11 @@
-define(['backbone', 'router', 'tpl!template/home.html', 'collection/Contacts'], function (Backbone, router, HomeTemplate, Contacts) {
+define(['backbone', 'router', 'tpl!template/contact/list.html', 'collection/Contacts'], 
+    function (Backbone, router, ListContactsTemplate, Contacts) {
+
   return Backbone.View.extend({
-    template: HomeTemplate,
+    template: ListContactsTemplate,
+    events: {
+      'click a': 'routeLink'
+    },
     initialize: function () {
       var _this = this;
       this.loading = true;
@@ -16,6 +21,11 @@ define(['backbone', 'router', 'tpl!template/home.html', 'collection/Contacts'], 
       } else {
         this.$el.html(this.template({collection:this.collection}));
       }
+    },
+    routeLink: function (e) {
+      e.preventDefault();
+      router.navigate(e.target.getAttribute('href'), {trigger:true});
     }
   });
+
 });
