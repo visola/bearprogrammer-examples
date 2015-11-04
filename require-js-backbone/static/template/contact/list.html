@@ -13,7 +13,11 @@
       </thead>
     <% for (var i = 0; i < collection.length; i++) { %>
       <tr>
-        <td><a href="/contacts/<%= collection.at(i).id %>"><%= collection.at(i).get('firstName') %></td>
+        <td>
+            <a href="/contacts/<%= collection.at(i).id %>">
+              <%= collection.at(i).get('firstName') %>
+            </a>
+        </td>
         <td><%= collection.at(i).get('lastName') %></td>
       </tr>
     <% } %>
