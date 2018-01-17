@@ -18,3 +18,5 @@ selenium-screenshot-*.png
 bin/
 build/
 .gradle/
+.idea/
+*.iml
