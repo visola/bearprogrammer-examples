@@ -8,6 +8,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 repositories {
@@ -16,4 +17,11 @@ repositories {
 
 dependencies {
   compile('org.springframework.boot:spring-boot-starter-web')
+}
+
+idea {
+  module {
+    outputDir file('build/classes/main')
+    testOutputDir file('build/classes/test')
+  }
 }
